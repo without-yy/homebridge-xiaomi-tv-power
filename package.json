@@ -2,7 +2,7 @@
   "private": true,
   "displayName": "XiaomiTvPower",
   "name": "homebridge-xiaomi-tv-power",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "homebridge小米电视关机插件",
   "license": "Apache-2.0",
   "repository": {

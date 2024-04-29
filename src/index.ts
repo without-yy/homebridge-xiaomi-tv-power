@@ -52,9 +52,9 @@ class XiaomiTvPowerOutlet implements AccessoryPlugin {
       .setCharacteristic(hap.Characteristic.FirmwareRevision, packageJSON.version);
 
 
-    // 5分钟获取一次状态，缓存在本地，用于查询时快速返回
+    // 30秒获取一次状态，缓存在本地，用于查询时快速返回
     this.updateCacheState();
-    setInterval(() => this.updateCacheState(), 5 * 60 * 1000);
+    setInterval(() => this.updateCacheState(), 30 * 1000);
   }
 
   getServices(): Service[] {
@@ -68,22 +68,18 @@ class XiaomiTvPowerOutlet implements AccessoryPlugin {
       if (value) {
         callback();
         // 不支持远程开启，将状态重置
-        setTimeout(()=>{
-          this.setState(false);
-        }, 300);
+        this.setState(false);
       } else {
         // 关闭插座
         await axios.get(`http://${this.ip}:6095/controller?action=keyevent&keycode=power`, { timeout: 3000 });
         this.log(`${this.name}已关闭。`);
-        this.outletState = true;
+        this.outletState = false;
         callback();
       }
     } catch (error: any) {
       this.log(`无法关闭插座：${error.message}`);
       callback();
-      setTimeout(()=>{
-        this.setState(false);
-      }, 300);
+      this.setState(false);
     }
   }
 
